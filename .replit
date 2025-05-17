@@ -1,0 +1,32 @@
+modules = ["nodejs-20", "postgresql-16"]
+
+[nix]
+channel = "stable-24_05"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Main Server"
+
+[[workflows.workflow]]
+name = "Main Server"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm install && npx next dev -p 5000"
+waitForPort = 5000
+
+[deployment]
+run = ["sh", "-c", "npm install && npx next dev -p 5000"]
+
+[[ports]]
+localPort = 5000
+externalPort = 80
